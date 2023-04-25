@@ -11,7 +11,14 @@ async function bootstrap() {
 
   app.set('trust proxy', 1);
 
-  app.useGlobalPipes(new ValidationPipe());
+  // Pipes
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('CAF Nest API')

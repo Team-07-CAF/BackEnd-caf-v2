@@ -9,7 +9,11 @@ async function bootstrap() {
         cors: true,
     });
     app.set('trust proxy', 1);
-    app.useGlobalPipes(new common_1.ValidationPipe());
+    app.useGlobalPipes(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }));
     const config = new swagger_1.DocumentBuilder()
         .setTitle('CAF Nest API')
         .setDescription('API criada em Nest.JS referente ao bootcamp II da BLUE')

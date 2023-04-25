@@ -15,22 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
+const is_public_decorator_1 = require("./auth/decorators/is-public.decorator");
+const current_user_decorator_1 = require("./auth/decorators/current-user.decorator");
+const user_entity_1 = require("./user/entities/user.entity");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
-    getHello(res) {
-        const url = this.appService.getURL();
-        res.redirect(url);
+    getHello() {
+        return this.appService.getHello();
+    }
+    getMe(user) {
+        return user;
     }
 };
 __decorate([
+    (0, is_public_decorator_1.IsPublic)(),
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
+__decorate([
+    (0, common_1.Get)('me'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_entity_1.User]),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "getMe", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])

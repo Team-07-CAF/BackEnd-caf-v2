@@ -13,6 +13,9 @@ exports.CreateUserDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
+    constructor() {
+        this.isActive = true;
+    }
 }
 __decorate([
     (0, class_validator_1.IsString)(),
@@ -37,6 +40,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MinLength)(6),
+    (0, class_validator_1.MaxLength)(20),
+    (0, class_validator_1.Matches)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'password too weak',
+    }),
     (0, swagger_1.ApiProperty)({
         example: 'Abc@123',
         description: 'Sua senha de acesso com no mínimo 6 caracteres.',

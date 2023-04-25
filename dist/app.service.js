@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 let AppService = class AppService {
-    getURL() {
+    getHello() {
         return 'https://backend-caf-v2-production.up.railway.app/docs';
     }
 };

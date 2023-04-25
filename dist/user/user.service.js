@@ -12,24 +12,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const bcrypt = require("bcrypt");
 let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    create(createUserDto) {
-        return 'This action adds a new user';
+    async create(createUserDto) {
+        const data = Object.assign(Object.assign({}, createUserDto), { password: await bcrypt.hash(createUserDto.password, 10), isActive: true });
+        const createdUser = await this.prisma.user.create({ data });
+        return Object.assign(Object.assign({}, createdUser), { password: undefined });
     }
-    findAll() {
-        return `This action returns all user`;
+    async findAll() {
+        return this.prisma.user.findMany();
     }
-    findOne(id) {
-        return `This action returns a #${id} user`;
+    async findOne(id) {
+        return this.prisma.user.findUnique({ where: { id } });
     }
-    update(id, updateUserDto) {
-        return `This action updates a #${id} user`;
+    async update(id, updateUserDto) {
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        if (updateUserDto.password) {
+            updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+        }
+        const updatedUser = await this.prisma.user.update({
+            where: { id },
+            data: updateUserDto,
+        });
+        return Object.assign(Object.assign({}, updatedUser), { password: undefined });
     }
-    remove(id) {
-        return `This action removes a #${id} user`;
+    async remove(id) {
+        const user = await this.prisma.user.delete({ where: { id } });
+        return Object.assign(Object.assign({}, user), { password: undefined });
+    }
+    async findByEmail(email) {
+        return this.prisma.user.findUnique({
+            where: { email },
+        });
     }
 };
 UserService = __decorate([

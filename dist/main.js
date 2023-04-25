@@ -16,6 +16,7 @@ async function bootstrap() {
         .setVersion('1.0')
         .addServer('https://backend-caf-v2-production.up.railway.app/docs')
         .addTag('User')
+        .addTag('Transaction')
         .addBearerAuth()
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
